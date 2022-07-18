@@ -22,7 +22,7 @@ jobs:
         id: get-ocir-repository-path
         with:
           compartment: ${{ secrets.OCI_COMPARTMENT }}
-          name: 'mr-devops/githubactions'
+          name: 'githubactions'
 
       - name: Build and push a container image
         run: |
