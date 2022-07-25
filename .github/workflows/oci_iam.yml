@@ -16,6 +16,7 @@ jobs:
       OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
       OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
       OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+
     steps:
       - name: Get or create an OCIR Repository
         uses: oracle-actions/get-ocir-repository@v1.0
@@ -39,3 +40,17 @@ jobs:
           ls -ltr
           docker build -t "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}" .
           docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}"
+
+      - name: Invoke deployment pipeline
+        uses: oracle-actions/run-oci-cli-command@v1.0
+        id: invoke-deployments
+        with:
+          command: 'devops deployment create-pipeline-deployment --pipeline-id ${{ secrets.DEPLOYMENT_PIPELINE_OCID }} --deployment-arguments '{ "items": [ { "name": "namespace", "value": "ns-github" }, { "name": "image_tag", "value": "'${{github.run_number}}'" } ] }''
+
+
+      - name: List the display name and shape of the instances in my compartment
+        run: |
+          echo ${{ steps.find-my-compartment-instances.outputs.output }} | jq .
+
+
+          oci devops deployment create-pipeline-deployment --pipeline-id ocid1.devopsdeploypipeline.oc1.us-sanjose-1.amaaaaaayat6pyaa2ajah2eguxxp4rct454ghcbimpjfva3xq5vgu2lcs46a --deployment-arguments '{ "items": [ { "name": "namespace", "value": "ns-github" }, { "name": "image_tag", "value": "'${a}'" } ] }'
