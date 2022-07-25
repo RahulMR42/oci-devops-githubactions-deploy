@@ -33,5 +33,5 @@ jobs:
       - name: Tag and push a container image
         id: tag-and-push-image
         run: |
-          docker build -t "${{ steps.get-ocir-repository.outputs.repo_path }}:{{github.run_number}}" .
-          docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:{{github.run_number}}"
+          docker build -t "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}" .
+          docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}"
