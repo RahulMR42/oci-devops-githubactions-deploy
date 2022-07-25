@@ -9,7 +9,7 @@ on:
 jobs:
   get-ocir-repository-test:
     runs-on: ubuntu-latest
-    name: Get OCIR Repository Test
+    name: Invoke OCI Deployment on to OKE .
     env:
       OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
       OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
@@ -21,7 +21,7 @@ jobs:
         uses: oracle-actions/get-ocir-repository@v1.0
         id: get-ocir-repository
         with:
-          name: oraclelinux
+          name: python_fastapi_app
           compartment: ${{ secrets.OCI_COMPARTMENT_OCID }}
 
       - name: Log into OCIR
@@ -30,16 +30,8 @@ jobs:
         with:
           auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
 
-      - name: Output Run ID
-        run: echo ${{ github.run_id }}
-      - name: Output Run Number
-        run: echo ${{ github.run_number }}
-      - name: Output Run Attempt
-        run: echo ${{ github.run_attempt }}
-
       - name: Tag and push a container image
         id: tag-and-push-image
         run: |
-          docker pull oraclelinux:8-slim
-          docker tag "oraclelinux:8-slim" "${{ steps.get-ocir-repository.outputs.repo_path }}:8-slim"
+          docker build -t "${{ steps.get-ocir-repository.outputs.repo_path }}:{{github.run_number}}"
           docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:8-slim"
