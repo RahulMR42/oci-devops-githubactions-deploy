@@ -42,16 +42,20 @@ jobs:
           ls -ltr
           docker build -t "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}" .
           docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}"
-          echo '{ "items": [ { "name": "namespace", "value": "ns-github" }, { "name": "image_tag", "value": "'${{github.run_number}}'" } ] }' >deployarguments.json
+
+
+      - name: Generate deploy arguments
+        id: deploy-args
+        run: |
+          echo "::set-output name=oci-deploy-id::${{ secrets.OCI_DEPLOY_OCID }}"
+          echo "::set-output name=deploy-args::{\"items\:[{\"name\":\"namespace\",\"value\":\"ns-github\"},{\"name\":\"image_tag\",\"value\":\"'${{github.run_number}}'\"}]}""
 
       - name: Invoke deployment pipeline
         uses: oracle-actions/run-oci-cli-command@v1.0
         id: invoke-deployments
         with:
-          command: devops deployment create-pipeline-deployment --pipeline-id '"$OCI_DEPLOY_OCID'"
+          command: devops deployment create-pipeline-deployment --pipeline-id ${{ steps.deploy-args.outputs.oci-deploy-id }} --deployment-arguments ${{ steps.tag-and-push-image.outputs.deploy-args }}
           silent: false
 
-      - name: Output of deploy request.
-        run: |
-          ls -ltr
-          echo ${{ steps.invoke-deployments.outputs.output }} | jq .
+
+
