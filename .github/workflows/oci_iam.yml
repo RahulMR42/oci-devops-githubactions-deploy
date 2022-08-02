@@ -52,8 +52,9 @@ jobs:
         uses: oracle-actions/run-oci-cli-command@v1.0
         id: invoke-deployments
         with:
-          command: devops deployment create-pipeline-deployment --pipeline-id ${{ steps.deploy-args.outputs.oci-deploy-id }} --deployment-arguments ${{ steps.tag-and-push-image.outputs.deploy-args }}
+          command: devops deployment create-pipeline-deployment --pipeline-id ${{ steps.deploy-args.outputs.oci-deploy-id }}
           silent: false
 
+# --deployment-arguments ${{ steps.tag-and-push-image.outputs.deploy-args }}
 
 
