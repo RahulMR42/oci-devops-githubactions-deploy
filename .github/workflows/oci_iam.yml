@@ -48,7 +48,7 @@ jobs:
         uses: oracle-actions/run-oci-cli-command@v1.0
         id: invoke-deployments
         with:
-          command: devops deployment create-pipeline-deployment --pipeline-id $OCI_DEPLOY_OCID
+          command: devops deployment create-pipeline-deployment --pipeline-id '"$OCI_DEPLOY_OCID'"
           silent: false
 
       - name: Output of deploy request.
