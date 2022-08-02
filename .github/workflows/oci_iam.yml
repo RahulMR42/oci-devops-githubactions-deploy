@@ -43,6 +43,7 @@ jobs:
           docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}"
           echo ${{ secrets.DEPLOYMENT_PIPELINE_OCID }}
           echo '{ "items": [ { "name": "namespace", "value": "ns-github" }, { "name": "image_tag", "value": "'${{github.run_number}}'" } ] }' >deployarguments.json
+          echo '${{env.OCI_DEPLOYMENT_ID}}'
 
       - name: Invoke deployment pipeline
         uses: oracle-actions/run-oci-cli-command@v1.0
