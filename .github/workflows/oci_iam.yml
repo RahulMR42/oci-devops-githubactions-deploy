@@ -48,8 +48,11 @@ jobs:
         id: invoke-deployments
         with:
           command: 'devops deployment create-pipeline-deployment --pipeline-id ${{secrets.DEPLOYMENT_PIPELINE_OCID }}'
-          # --deployment-arguments file:///deployarguments.json'
+
 
       - name: Output of deploy request.
         run: |
           echo ${{ steps.invoke-deployments.outputs.output }} | jq .
+
+
+        # --deployment-arguments file:///deployarguments.json'
