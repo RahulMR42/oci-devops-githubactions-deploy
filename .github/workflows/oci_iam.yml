@@ -48,7 +48,7 @@ jobs:
         id: deploy-args
         run: |
           echo "::set-output name=oci-deploy-id::${{ secrets.OCI_DEPLOY_OCID }}"
-          echo "::set-output name=deploy-args::{\"items\:[{\"name\":\"namespace\",\"value\":\"ns-github\"},{\"name\":\"image_tag\",\"value\":\"'${{github.run_number}}'\"}]}""
+          echo "::set-output name=deploy-args::"{\"items\:[{\"name\":\"namespace\",\"value\":\"ns-github\"},{\"name\":\"image_tag\",\"value\":\"'${{github.run_number}}'\"}]}""
 
       - name: Invoke deployment pipeline
         uses: oracle-actions/run-oci-cli-command@v1.0
