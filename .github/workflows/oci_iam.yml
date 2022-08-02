@@ -16,7 +16,8 @@ jobs:
       OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
       OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
       OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
-      OCI_DEPLOY_OCID: ${{ secrets.DEPLOYMENT_PIPELINE_OCID }}
+      OCI_DEPLOY_OCID: ocid1.devopsdeploypipeline.oc1.us-sanjose-1.amaaaaaayat6pyaa2ajah2eguxxp4rct454ghcbimpjfva3xq5vgu2lcs46a
+      #${{ secrets.DEPLOYMENT_PIPELINE_OCID }}
 
     steps:
       - name: Get or create an OCIR Repository
