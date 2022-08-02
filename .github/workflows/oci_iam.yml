@@ -41,13 +41,8 @@ jobs:
           docker build -t "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}" .
           docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}"
 
-#      - name: Invoke deployment pipeline
-#        uses: oracle-actions/run-oci-cli-command@v1.0
-#        id: invoke-deployments
-#        with:
-#          command: 'devops deployment create-pipeline-deployment --pipeline-id ${{ secrets.DEPLOYMENT_PIPELINE_OCID }}'
-## --deployment-arguments { "items": [ { "name": "namespace", "value": "ns-github" }, { "name": "image_tag", "value": "'${{github.run_number}}'" } ] }'
-#
-#      - name: List the display name and shape of the instances in my compartment
-#        run: |
-#          echo ${{ steps.find-my-compartment-instances.outputs.output }} | jq .
+      - name: Invoke deployment pipeline
+        uses: oracle-actions/run-oci-cli-command@v1.0
+        id: invoke-deployments
+        with:
+          command: 'devops deployment create-pipeline-deployment --pipeline-id ${{ secrets.DEPLOYMENT_PIPELINE_OCID }}'
