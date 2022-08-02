@@ -40,6 +40,7 @@ jobs:
           ls -ltr
           docker build -t "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}" .
           docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:${{github.run_number}}"
+          echo ${{ secrets.DEPLOYMENT_PIPELINE_OCID }}
           echo '{ "items": [ { "name": "namespace", "value": "ns-github" }, { "name": "image_tag", "value": "'${{github.run_number}}'" } ] }' >deployarguments.json
 
       - name: Invoke deployment pipeline
