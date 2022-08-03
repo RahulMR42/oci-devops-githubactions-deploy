@@ -45,7 +45,8 @@ jobs:
       - name: Generate deploy arguments
         id: reate-json
         run: |
-          echo "::set-output name=deployargs::{\"items\":[{\"name\":\"namespace\",\"value\":\"github\"},{\"name\":\"image_tag\",\"value\":\"$GITHUB_RUN_NUMBER\"}]}"
+          echo "::set-output name=metadata::{\"created_by\":\"$GITHUB_ACTOR\",\"triggered_by\":\"$GITHUB_EVENT_NAME\"}"
+          echo "::set-output name=deployargs::{\"items\":[{\"name\":\"namespace\",\"value\":\"ns-github\"},{\"name\":\"image_tag\",\"value\":\"$GITHUB_RUN_NUMBER\"}]}"
 
 
       - name: Create a uniquely named file
@@ -67,7 +68,7 @@ jobs:
         uses: oracle-actions/run-oci-cli-command@v1.0
         id: invoke-deployments
         with:
-          command: devops deployment create-pipeline-deployment --pipeline-id ${{ secrets.DEPLOYMENT_PIPELINE_OCID }}
+          command: devops deployment create-pipeline-deployment --pipeline-id ${{ secrets.DEPLOYMENT_PIPELINE_OCID }} --deployment-arguments ${{ toJSON(steps.create-json.outputs.deployargs) }}
           silent: false
 
       - name: Show then delete file
