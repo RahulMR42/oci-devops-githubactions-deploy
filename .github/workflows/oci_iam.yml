@@ -43,7 +43,7 @@ jobs:
 
 
       - name: Generate deploy arguments
-        id: reate-json
+        id: create-json
         run: |
           echo "::set-output name=metadata::{\"created_by\":\"$GITHUB_ACTOR\",\"triggered_by\":\"$GITHUB_EVENT_NAME\"}"
           echo "::set-output name=deployargs::{\"items\":[{\"name\":\"namespace\",\"value\":\"ns-github\"},{\"name\":\"image_tag\",\"value\":\"$GITHUB_RUN_NUMBER\"}]}"
