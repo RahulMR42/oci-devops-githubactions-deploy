@@ -66,7 +66,7 @@ jobs:
 
       - name: Invoke deployment pipeline
         uses: oracle-actions/run-oci-cli-command@v1.0
-        id: invoke-deployments
+        id:  invoke-deployments
         with:
           command: devops deployment create-pipeline-deployment --pipeline-id ${{ secrets.DEPLOYMENT_PIPELINE_OCID }} --deployment-arguments ${{ toJSON(steps.create-json.outputs.deployargs) }}
           silent: false
