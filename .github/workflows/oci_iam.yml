@@ -44,7 +44,6 @@ jobs:
       - name: Generate deploy arguments
         id: deploy-args
         run: |
-      # echo "::set-output name=oci-deploy-id::${{ secrets.DEPLOYMENT_PIPELINE_OCID }}"
           echo "::set-output name=deploy-args::"{\"items\:[{\"name\":\"namespace\",\"value\":\"ns-github\"},{\"name\":\"image_tag\",\"value\":\"'${{github.run_number}}'\"}]}""
 
       - name: Invoke deployment pipeline
