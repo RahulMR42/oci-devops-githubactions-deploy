@@ -43,9 +43,25 @@ jobs:
 
 
       - name: Generate deploy arguments
-        id: deploy-args
+        id: reate-json
         run: |
-          echo "::set-output name=deploy-args::"{\"items\:[{\"name\":\"namespace\",\"value\":\"ns-github\"},{\"name\":\"image_tag\",\"value\":\"'${{github.run_number}}'\"}]}""
+          echo "::set-output name=deployargs::{\"items\":[{\"name\":\"namespace\",\"value\":\"github\"},{\"name\":\"image_tag\",\"value\":\"$GITHUB_RUN_NUMBER\"}]}"
+
+
+      - name: Create a uniquely named file
+        id: create-file
+        run: |
+          TEST_FILE_FULL_PATH=$(mktemp)
+          TEST_FILE_NAME=$(basename $TEST_FILE_FULL_PATH)
+          echo "The file at ${TEST_FILE_FULL_PATH} created by ${GITHUB_ACTOR} and was triggered by ${GITHUB_EVENT_NAME}" | tee $TEST_FILE_FULL_PATH
+          echo "::set-output name=filename::${TEST_FILE_NAME}"
+          echo "::set-output name=filepath::${TEST_FILE_FULL_PATH}"
+
+      - name: Display and save the generated JSON
+        run: |
+          echo '${{ steps.create-json.outputs.metadata }}' | jq
+          echo '${{ steps.create-json.outputs.deployargs }}' | tee -a ${{ steps.create-file.outputs.filepath }}
+
 
       - name: Invoke deployment pipeline
         uses: oracle-actions/run-oci-cli-command@v1.0
@@ -54,6 +70,10 @@ jobs:
           command: devops deployment create-pipeline-deployment --pipeline-id ${{ secrets.DEPLOYMENT_PIPELINE_OCID }}
           silent: false
 
-# --deployment-arguments ${{ steps.tag-and-push-image.outputs.deploy-args }}
+      - name: Show then delete file
+        id: show-delete-file
+        run: |
+          cat ${{ steps.create-file.outputs.fullpath }}
+          rm -f ${{ steps.create-file.outputs.fullpath }}
 
 
